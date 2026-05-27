@@ -74,10 +74,11 @@
       await push(ref(db, "votes"), { t: selectedT, zone: getZoneIndex(selectedT), ts: ts() });
       localStorage.setItem(STORAGE_KEY, "1");
       hasVoted = true;
-      submitBtn.textContent = "Vote Recorded!";
-      statusEl.textContent = "Thanks! Your vote has been added to the heat map below.";
+      submitBtn.textContent = "Vote Recorded! Taking you to results…";
+      statusEl.textContent = "Thanks! Redirecting to the heat map…";
       overlay.style.cursor = "default";
       ring.setAttribute("cx", -200);
+      setTimeout(() => { window.location.href = "results.html"; }, 1500);
     } catch (err) {
       console.error(err);
       statusEl.textContent = "Something went wrong. Please try again.";
@@ -130,8 +131,8 @@
       const t         = (i + 0.5) / BINS;
       const pt        = getPointAtT(path, t);
       const intensity = count / maxBin;
-      const radius    = 6 + intensity * 18;
-      const opacity   = 0.25 + intensity * 0.65;
+      const radius    = 2 + intensity * 7;
+      const opacity   = 0.3 + intensity * 0.65;
       const r = Math.round(255 * Math.min(1, intensity * 2));
       const g = Math.round(255 * Math.max(0, 1 - Math.abs(intensity - 0.5) * 2));
       const b = Math.round(255 * Math.max(0, 1 - intensity * 2));

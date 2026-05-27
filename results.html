@@ -3,15 +3,144 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Where Are We on the Coaster?</title>
+  <title>Live Results — The Economy Roller Coaster</title>
   <link rel="stylesheet" href="css/styles.css" />
-
-  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7101645735981580" crossorigin="anonymous"></script>
+  <style>
+    .results-hero {
+      text-align: center;
+      padding: 2rem 1rem 0.5rem;
+    }
+    .results-hero h2 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: #888;
+      font-weight: normal;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .vote-total {
+      font-family: 'Georgia', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: #C9A456;
+      font-weight: bold;
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(201,164,86,0.35);
+    }
+    .vote-total-label {
+      font-size: 0.85rem;
+      color: #666;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+    .zone-legend {
+      max-width: 700px;
+      margin: 2rem auto 0;
+      padding: 0 1rem;
+    }
+    .zone-legend h3 {
+      font-family: 'Georgia', serif;
+      color: #C9A456;
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .zone-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 0.3rem;
+      transition: background 0.15s;
+    }
+    .zone-row:hover { background: rgba(255,255,255,0.04); }
+    .zone-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(201,164,86,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: #FFD700;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .zone-num.peak { background: #CC0000; }
+    .zone-label-text {
+      font-size: 0.82rem;
+      color: #bbb;
+      flex: 1;
+    }
+    .zone-bar-wrap {
+      width: 100px;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .zone-bar {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #1a6bcc, #FFD700, #CC0000);
+      transition: width 0.6s ease;
+    }
+    .zone-pct {
+      font-size: 0.75rem;
+      color: #666;
+      width: 34px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .cast-vote-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.65rem 2rem;
+      background: transparent;
+      border: 1px solid rgba(201,164,86,0.5);
+      color: #C9A456;
+      font-family: 'Georgia', serif;
+      font-size: 0.95rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .cast-vote-btn:hover {
+      background: rgba(201,164,86,0.1);
+      border-color: #C9A456;
+    }
+    .results-actions {
+      text-align: center;
+      margin: 1.5rem 0 0;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #5fd35f;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+      vertical-align: middle;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- TOP AD BANNER -->
+  <!-- TOP AD -->
   <div class="ad-banner ad-top">
     <ins class="adsbygoogle"
          style="display:block"
@@ -24,17 +153,20 @@
 
   <header>
     <h1>The Economy Roller Coaster</h1>
-    <p class="subtitle">Where do <em>you</em> think we are?</p>
+    <p class="subtitle"><span class="live-dot"></span>Live Results</p>
   </header>
 
   <main>
-    <section class="instructions">
-      <p>Click on the track to place your car at the point that best describes where you think we are heading economically. Then hit <strong>Submit</strong>.</p>
-    </section>
+    <!-- VOTE COUNT HERO -->
+    <div class="results-hero">
+      <h2>Total Votes Cast</h2>
+      <div class="vote-total" id="hero-vote-count">—</div>
+      <div class="vote-total-label">and counting</div>
+    </div>
 
-    <!-- ROLLER COASTER SVG -->
-    <div class="coaster-wrapper">
-      <svg id="coaster-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <!-- HEATMAP TRACK -->
+    <div class="coaster-wrapper heatmap-view" style="margin-top:1.5rem;">
+      <svg id="results-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%"   stop-color="#FFD700" />
@@ -58,7 +190,7 @@
             <stop offset="100%" stop-color="#1A1208" />
           </linearGradient>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feGaussianBlur stdDeviation="4" result="blur" />
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           <clipPath id="trackClip">
@@ -91,7 +223,7 @@
           <polygon points="1010,80 1002,110 1010,108 1000,140 1018,100 1010,102" fill="#FFD700" opacity="0.9"/>
         </g>
 
-        <!-- Track -->
+        <!-- Track — same path as index.html -->
         <path id="track-path"
           d="M 30,380
              C 80,375 150,355 210,325
@@ -136,35 +268,20 @@
         <!-- Heat map layer -->
         <g id="heat-map-layer" clip-path="url(#trackClip)"></g>
 
-        <!-- Zone labels -->
+        <!-- Zone markers -->
         <g id="zone-labels" font-family="'Courier New', monospace" font-size="11" fill="white" text-anchor="middle"></g>
-
-        <!-- Coaster car -->
-        <g id="coaster-car" transform="translate(30, 340)" style="cursor:pointer; display:none;">
-          <rect x="-18" y="-14" width="36" height="22" rx="5" fill="#CC0000" stroke="#FF4444" stroke-width="1.5"/>
-          <rect x="-10" y="-12" width="20" height="10" rx="2" fill="#87CEEB" opacity="0.7"/>
-          <circle cx="-10" cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
-          <circle cx="10"  cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
-          <circle cx="0" cy="-16" r="5" fill="#FFD700"/>
-          <rect x="-4" y="-11" width="8" height="7" rx="2" fill="#FFD700"/>
-        </g>
-
-        <!-- Click overlay -->
-        <rect id="click-overlay" x="0" y="0" width="1200" height="500" fill="transparent" style="cursor:crosshair"/>
-
-        <!-- Placement ring -->
-        <circle id="placement-ring" cx="-100" cy="-100" r="14" fill="none" stroke="#FFD700" stroke-width="2.5" opacity="0.8" stroke-dasharray="4 3"/>
       </svg>
-
-      <div id="stage-label-display" class="stage-label-display">
-        <span id="stage-label-text">Click anywhere on the track</span>
-      </div>
     </div>
 
-    <!-- Submit -->
-    <div class="controls">
-      <button id="submit-btn" class="btn-submit" disabled>Place your car first</button>
-      <p id="submit-status" class="submit-status"></p>
+    <!-- SHARE SECTION -->
+    <div class="share-section" style="margin-top:2rem;">
+      <p>Share the results:</p>
+      <div class="share-buttons">
+        <button class="btn-share btn-twitter" onclick="shareTwitter()">Share on X</button>
+        <button class="btn-share btn-facebook" onclick="shareFacebook()">Share on Facebook</button>
+        <button class="btn-share btn-copy" onclick="copyLink()">Copy Link</button>
+      </div>
+      <p id="copy-confirm" class="copy-confirm"></p>
     </div>
 
     <!-- MID AD -->
@@ -178,28 +295,16 @@
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <!-- HEAT MAP SECTION -->
-    <section class="heatmap-section">
-      <h2>Where Does Everyone Think We Are?</h2>
-      <p class="heatmap-subtitle">Live results — updated in real time as votes come in.</p>
+    <!-- ZONE BREAKDOWN -->
+    <div class="zone-legend">
+      <h3>Zone Breakdown</h3>
+      <div id="zone-breakdown"></div>
+    </div>
 
-      <div class="coaster-wrapper heatmap-view">
-        <svg id="heatmap-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-          <use href="#coaster-svg" />
-        </svg>
-      </div>
-
-      <!-- Share buttons -->
-      <div class="share-section">
-        <p>Share the results:</p>
-        <div class="share-buttons">
-          <button class="btn-share btn-twitter" onclick="shareTwitter()">Share on X</button>
-          <button class="btn-share btn-facebook" onclick="shareFacebook()">Share on Facebook</button>
-          <button class="btn-share btn-copy" onclick="copyLink()">Copy Link</button>
-        </div>
-        <p id="copy-confirm" class="copy-confirm"></p>
-      </div>
-    </section>
+    <!-- BACK TO VOTE -->
+    <div class="results-actions">
+      <a href="/" class="cast-vote-btn">← Cast Your Vote</a>
+    </div>
 
     <!-- BOTTOM AD -->
     <div class="ad-banner ad-bottom">
@@ -220,18 +325,12 @@
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, serverTimestamp }
+    import { getDatabase, ref, onValue }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import { firebaseConfig } from "./js/firebase-config.js";
 
     const app = initializeApp(firebaseConfig);
     const db  = getDatabase(app);
-
-    window.__firebaseDB  = db;
-    window.__firebaseRef = ref;
-    window.__firebasePush = push;
-    window.__firebaseOnValue = onValue;
-    window.__firebaseServerTimestamp = serverTimestamp;
 
     const votesRef = ref(db, "votes");
     onValue(votesRef, (snapshot) => {
@@ -241,6 +340,6 @@
   </script>
 
   <script src="js/track.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/results.js"></script>
 </body>
 </html>
