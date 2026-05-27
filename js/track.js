@@ -2,14 +2,14 @@
   const TRACK_ID = "track-path";
   const ZONES = [
     { t: 0.00, label: "There's no problem here" },
-    { t: 0.11, label: "There's a few bumps, but we're good" },
-    { t: 0.22, label: "We are heading for hard times but there's still time to get back on track" },
-    { t: 0.33, label: "A couple more \"once in a lifetime events\" and we're screwed" },
-    { t: 0.44, label: "There's nowhere to go but down, we're not prepared for the fallout" },
-    { t: 0.55, label: "Hold on for your life! Time to make a plan" },
-    { t: 0.66, label: "It's too late for plans, we're in for a world of hurt" },
-    { t: 0.77, label: "My life has already been turned upside down" },
-    { t: 0.88, label: "End times feels near" },
+    { t: 0.07, label: "There's a few bumps, but we're good" },
+    { t: 0.14, label: "We are heading for hard times but there's still time to get back on track" },
+    { t: 0.22, label: "A couple more \"once in a lifetime events\" and we're screwed" },
+    { t: 0.32, label: "There's nowhere to go but down, we're not prepared for the fallout" },
+    { t: 0.46, label: "Hold on for your life! Time to make a plan" },
+    { t: 0.59, label: "It's too late for plans, we're in for a world of hurt" },
+    { t: 0.72, label: "My life has already been turned upside down" },
+    { t: 0.86, label: "End times feels near" },
     { t: 1.00, label: "Nowhere to go but up" },
   ];
 
