@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Where Are We on the Coaster?</title>
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7101645735981580" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- TOP AD BANNER -->
+  <div class="ad-banner ad-top">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7101645735981580"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <header>
+    <h1>The Economy Roller Coaster</h1>
+    <p class="subtitle">Where do <em>you</em> think we are?</p>
+  </header>
+
+  <main>
+    <section class="instructions">
+      <p>Click on the track to place your car at the point that best describes where you think we are heading economically. Then hit <strong>Submit</strong>.</p>
+    </section>
+
+    <!-- ROLLER COASTER SVG -->
+    <div class="coaster-wrapper">
+      <svg id="coaster-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#FFD700" />
+            <stop offset="40%"  stop-color="#FFA500" />
+            <stop offset="50%"  stop-color="#CC5500" />
+            <stop offset="65%"  stop-color="#8B1A1A" />
+            <stop offset="80%"  stop-color="#4A0A0A" />
+            <stop offset="100%" stop-color="#1A0A00" />
+          </linearGradient>
+          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#87CEEB" />
+            <stop offset="42%"  stop-color="#4A7C9E" />
+            <stop offset="55%"  stop-color="#2C3E50" />
+            <stop offset="75%"  stop-color="#1A1A2E" />
+            <stop offset="100%" stop-color="#0D0D0D" />
+          </linearGradient>
+          <linearGradient id="groundGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#5D8A3C" />
+            <stop offset="45%"  stop-color="#7A6A3C" />
+            <stop offset="70%"  stop-color="#4A3B2A" />
+            <stop offset="100%" stop-color="#1A1208" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <clipPath id="trackClip">
+            <rect x="0" y="0" width="1200" height="500"/>
+          </clipPath>
+        </defs>
+
+        <rect x="0" y="0" width="1200" height="420" fill="url(#skyGrad)" />
+        <rect x="0" y="420" width="1200" height="80" fill="url(#groundGrad)" />
+
+        <!-- Sun -->
+        <circle cx="80" cy="60" r="40" fill="#FFD700" opacity="0.85"/>
+        <g stroke="#FFD700" stroke-width="2" opacity="0.6">
+          <line x1="80" y1="10" x2="80" y2="0"/>
+          <line x1="120" y1="20" x2="130" y2="12"/>
+          <line x1="130" y1="60" x2="142" y2="60"/>
+          <line x1="120" y1="100" x2="130" y2="108"/>
+          <line x1="80" y1="110" x2="80" y2="120"/>
+          <line x1="40" y1="100" x2="30" y2="108"/>
+          <line x1="30" y1="60" x2="18" y2="60"/>
+          <line x1="40" y1="20" x2="30" y2="12"/>
+        </g>
+
+        <!-- Storm clouds -->
+        <g opacity="0.7">
+          <ellipse cx="950" cy="55" rx="70" ry="35" fill="#2C2C2C"/>
+          <ellipse cx="1000" cy="45" rx="55" ry="30" fill="#3A3A3A"/>
+          <ellipse cx="1070" cy="60" rx="65" ry="32" fill="#222"/>
+          <ellipse cx="1130" cy="50" rx="50" ry="28" fill="#1A1A1A"/>
+          <polygon points="1010,80 1002,110 1010,108 1000,140 1018,100 1010,102" fill="#FFD700" opacity="0.9"/>
+        </g>
+
+        <!-- Track -->
+        <path id="track-path"
+          d="M 30,380
+             C 80,375 130,365 180,350
+             C 230,335 280,310 330,280
+             C 380,250 420,220 460,190
+             C 490,168 508,148 520,120
+             C 532,148 545,175 565,210
+             C 590,255 610,285 630,310
+             C 650,335 665,355 680,368
+             C 693,360 700,340 703,318
+             C 706,296 703,272 698,250
+             C 693,228 685,208 678,190
+             C 671,172 665,158 665,145
+             C 665,132 671,120 683,112
+             C 695,104 712,102 728,108
+             C 744,114 756,126 762,142
+             C 768,158 768,178 762,196
+             C 756,214 744,228 728,236
+             C 712,244 695,244 683,238
+             C 671,232 665,220 665,208
+             C 665,200 668,193 672,188
+             C 690,200 710,205 728,202
+             C 760,196 782,170 782,142
+             C 782,136 781,130 780,125
+             C 800,130 820,145 835,162
+             C 855,184 868,212 874,238
+             C 876,248 877,258 876,266
+             C 874,280 868,292 860,300
+             C 880,305 900,318 916,335
+             C 936,356 948,382 950,400
+             C 960,395 975,385 990,375
+             C 1010,362 1030,348 1055,340
+             C 1080,332 1110,332 1140,338
+             C 1160,342 1175,350 1185,360"
+          fill="none"
+          stroke="url(#trackGrad)"
+          stroke-width="8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+        <!-- Heat map layer -->
+        <g id="heat-map-layer" clip-path="url(#trackClip)"></g>
+
+        <!-- Zone labels -->
+        <g id="zone-labels" font-family="'Courier New', monospace" font-size="11" fill="white" text-anchor="middle"></g>
+
+        <!-- Coaster car -->
+        <g id="coaster-car" transform="translate(30, 340)" style="cursor:pointer; display:none;">
+          <rect x="-18" y="-14" width="36" height="22" rx="5" fill="#CC0000" stroke="#FF4444" stroke-width="1.5"/>
+          <rect x="-10" y="-12" width="20" height="10" rx="2" fill="#87CEEB" opacity="0.7"/>
+          <circle cx="-10" cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
+          <circle cx="10"  cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
+          <circle cx="0" cy="-16" r="5" fill="#FFD700"/>
+          <rect x="-4" y="-11" width="8" height="7" rx="2" fill="#FFD700"/>
+        </g>
+
+        <!-- Click overlay -->
+        <rect id="click-overlay" x="0" y="0" width="1200" height="500" fill="transparent" style="cursor:crosshair"/>
+
+        <!-- Placement ring -->
+        <circle id="placement-ring" cx="-100" cy="-100" r="14" fill="none" stroke="#FFD700" stroke-width="2.5" opacity="0.8" stroke-dasharray="4 3"/>
+      </svg>
+
+      <div id="stage-label-display" class="stage-label-display">
+        <span id="stage-label-text">Click anywhere on the track</span>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="controls">
+      <button id="submit-btn" class="btn-submit" disabled>Place your car first</button>
+      <p id="submit-status" class="submit-status"></p>
+    </div>
+
+    <!-- MID AD -->
+    <div class="ad-banner ad-mid">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7101645735981580"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- HEAT MAP SECTION -->
+    <section class="heatmap-section">
+      <h2>Where Does Everyone Think We Are?</h2>
+      <p class="heatmap-subtitle">Live results — updated in real time as votes come in.</p>
+
+      <div class="coaster-wrapper heatmap-view">
+        <svg id="heatmap-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <use href="#coaster-svg" />
+        </svg>
+      </div>
+
+      <!-- Share buttons -->
+      <div class="share-section">
+        <p>Share the results:</p>
+        <div class="share-buttons">
+          <button class="btn-share btn-twitter" onclick="shareTwitter()">Share on X</button>
+          <button class="btn-share btn-facebook" onclick="shareFacebook()">Share on Facebook</button>
+          <button class="btn-share btn-copy" onclick="copyLink()">Copy Link</button>
+        </div>
+        <p id="copy-confirm" class="copy-confirm"></p>
+      </div>
+    </section>
+
+    <!-- BOTTOM AD -->
+    <div class="ad-banner ad-bottom">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7101645735981580"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer>
+    <p>This site is for entertainment and opinion purposes only. Not financial advice.</p>
+  </footer>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { firebaseConfig } from "./js/firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    window.__firebaseDB  = db;
+    window.__firebaseRef = ref;
+    window.__firebasePush = push;
+    window.__firebaseOnValue = onValue;
+    window.__firebaseServerTimestamp = serverTimestamp;
+
+    const votesRef = ref(db, "votes");
+    onValue(votesRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      window.dispatchEvent(new CustomEvent("votes-updated", { detail: data }));
+    });
+  </script>
+
+  <script src="js/track.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

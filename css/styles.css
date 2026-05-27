@@ -1,0 +1,274 @@
+/* ============================================================
+   ECONOMY ROLLER COASTER — Styles
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold:    #C9A456;
+  --red:     #CC0000;
+  --dark:    #0D0D0D;
+  --mid:     #1A1A2E;
+  --light:   #87CEEB;
+  --text:    #E8E0D0;
+  --muted:   #888;
+  --font-h:  'Georgia', serif;
+  --font-b:  'Courier New', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #111;
+  color: var(--text);
+  font-family: var(--font-b);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  text-align: center;
+  padding: 2.5rem 1rem 1rem;
+  width: 100%;
+  background: linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+  border-bottom: 1px solid rgba(201,164,86,0.2);
+}
+
+header h1 {
+  font-family: var(--font-h);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 30px rgba(201,164,86,0.4);
+}
+
+header .subtitle {
+  margin-top: 0.4rem;
+  font-size: 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.ad-banner {
+  width: 100%;
+  max-width: 900px;
+  min-height: 90px;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.2rem auto;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.ad-banner::before {
+  content: 'ADVERTISEMENT';
+  position: absolute;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 0.15em;
+}
+
+main {
+  width: 100%;
+  max-width: 1100px;
+  padding: 0 1rem 3rem;
+  flex: 1;
+}
+
+.instructions {
+  text-align: center;
+  margin: 1.5rem auto 1rem;
+  max-width: 700px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.instructions strong { color: var(--gold); }
+
+.coaster-wrapper {
+  width: 100%;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(201,164,86,0.15);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+  position: relative;
+  user-select: none;
+  cursor: crosshair;
+}
+
+.coaster-wrapper svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.stage-label-display {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, transparent 100%);
+  padding: 0.8rem 1.2rem;
+  text-align: center;
+  pointer-events: none;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#stage-label-text {
+  font-family: var(--font-h);
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  color: var(--gold);
+  font-style: italic;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+}
+
+.controls {
+  text-align: center;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.btn-submit {
+  background: var(--gold);
+  color: #111;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  font-family: var(--font-h);
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.2s, transform 0.1s, opacity 0.2s;
+}
+
+.btn-submit:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: #888;
+  color: #333;
+}
+
+.btn-submit:not(:disabled):hover {
+  background: #e0b86a;
+  transform: translateY(-1px);
+}
+
+.btn-submit:not(:disabled):active { transform: translateY(0); }
+
+.submit-status {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--gold);
+  min-height: 1.2em;
+}
+
+.heatmap-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(201,164,86,0.15);
+}
+
+.heatmap-section h2 {
+  font-family: var(--font-h);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.heatmap-subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.heatmap-view { cursor: default; }
+
+.vote-count {
+  text-align: center;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.vote-count span {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.share-section {
+  text-align: center;
+  margin: 1.8rem 0 0.5rem;
+}
+
+.share-section > p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-share {
+  padding: 0.55rem 1.4rem;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-b);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+}
+
+.btn-share:hover  { opacity: 0.85; transform: translateY(-1px); }
+.btn-share:active { transform: translateY(0); }
+
+.btn-twitter  { background: #000; color: #fff; border: 1px solid #333; }
+.btn-facebook { background: #1877F2; color: #fff; }
+.btn-copy     { background: rgba(255,255,255,0.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
+
+.copy-confirm {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #5fd35f;
+  min-height: 1.2em;
+}
+
+footer {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.25);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  header h1 { font-size: 1.6rem; }
+  .btn-submit { padding: 0.65rem 1.8rem; font-size: 1rem; }
+  .share-buttons { gap: 0.5rem; }
+  .btn-share { padding: 0.5rem 1rem; font-size: 0.78rem; }
+}
