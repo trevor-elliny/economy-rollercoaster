@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🛠 Sandbox — Economy Roller Coaster</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .sandbox-bar {
+      background: rgba(255, 200, 0, 0.08);
+      border: 1px solid rgba(255, 200, 0, 0.3);
+      border-radius: 6px;
+      padding: 0.75rem 1.2rem;
+      margin: 1rem auto;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .sandbox-bar span {
+      color: #FFD700;
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+      flex: 1;
+    }
+    .btn-sandbox {
+      padding: 0.45rem 1.1rem;
+      border-radius: 4px;
+      border: none;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-sandbox:hover { opacity: 0.8; }
+    .btn-add10  { background: #2a7a2a; color: #fff; }
+    .btn-add50  { background: #1a5a9a; color: #fff; }
+    .btn-add200 { background: #7a1a7a; color: #fff; }
+    .btn-clear  { background: #8a1a1a; color: #fff; }
+    .btn-again  { background: var(--gold, #C9A456); color: #111; }
+    .sandbox-vote-count {
+      text-align: center;
+      font-size: 1rem;
+      color: #FFD700;
+      margin: 0.3rem 0 1rem;
+      font-family: 'Courier New', monospace;
+    }
+    .sandbox-vote-count strong { font-size: 1.5rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>The Economy Roller Coaster</h1>
+    <p class="subtitle">🛠 Sandbox Mode — Unlimited votes, no Firebase, resets on reload</p>
+  </header>
+
+  <!-- SANDBOX CONTROLS -->
+  <div class="sandbox-bar">
+    <span>⚡ Sandbox: votes are in-memory only and do not affect real data</span>
+    <button class="btn-sandbox btn-add10"  onclick="addRandomVotes(10)">+ 10 random</button>
+    <button class="btn-sandbox btn-add50"  onclick="addRandomVotes(50)">+ 50 random</button>
+    <button class="btn-sandbox btn-add200" onclick="addRandomVotes(200)">+ 200 random</button>
+    <button class="btn-sandbox btn-clear"  onclick="clearVotes()">Clear all</button>
+  </div>
+
+  <main>
+    <section class="instructions">
+      <p>Click the track to place your car, hit <strong>Submit</strong>. No limits — vote as many times as you want to stress-test the heat map.</p>
+    </section>
+
+    <!-- VOTING TRACK -->
+    <div class="coaster-wrapper">
+      <svg id="coaster-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="trackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#FFD700" />
+            <stop offset="40%"  stop-color="#FFA500" />
+            <stop offset="50%"  stop-color="#CC5500" />
+            <stop offset="65%"  stop-color="#8B1A1A" />
+            <stop offset="80%"  stop-color="#4A0A0A" />
+            <stop offset="100%" stop-color="#1A0A00" />
+          </linearGradient>
+          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#87CEEB" />
+            <stop offset="42%"  stop-color="#4A7C9E" />
+            <stop offset="55%"  stop-color="#2C3E50" />
+            <stop offset="75%"  stop-color="#1A1A2E" />
+            <stop offset="100%" stop-color="#0D0D0D" />
+          </linearGradient>
+          <linearGradient id="groundGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#5D8A3C" />
+            <stop offset="45%"  stop-color="#7A6A3C" />
+            <stop offset="70%"  stop-color="#4A3B2A" />
+            <stop offset="100%" stop-color="#1A1208" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <clipPath id="trackClip">
+            <rect x="0" y="0" width="1200" height="500"/>
+          </clipPath>
+        </defs>
+
+        <rect x="0" y="0" width="1200" height="420" fill="url(#skyGrad)" />
+        <rect x="0" y="420" width="1200" height="80" fill="url(#groundGrad)" />
+
+        <circle cx="80" cy="60" r="40" fill="#FFD700" opacity="0.85"/>
+        <g stroke="#FFD700" stroke-width="2" opacity="0.6">
+          <line x1="80" y1="10" x2="80" y2="0"/>
+          <line x1="120" y1="20" x2="130" y2="12"/>
+          <line x1="130" y1="60" x2="142" y2="60"/>
+          <line x1="120" y1="100" x2="130" y2="108"/>
+          <line x1="80" y1="110" x2="80" y2="120"/>
+          <line x1="40" y1="100" x2="30" y2="108"/>
+          <line x1="30" y1="60" x2="18" y2="60"/>
+          <line x1="40" y1="20" x2="30" y2="12"/>
+        </g>
+        <g opacity="0.7">
+          <ellipse cx="950" cy="55" rx="70" ry="35" fill="#2C2C2C"/>
+          <ellipse cx="1000" cy="45" rx="55" ry="30" fill="#3A3A3A"/>
+          <ellipse cx="1070" cy="60" rx="65" ry="32" fill="#222"/>
+          <ellipse cx="1130" cy="50" rx="50" ry="28" fill="#1A1A1A"/>
+          <polygon points="1010,80 1002,110 1010,108 1000,140 1018,100 1010,102" fill="#FFD700" opacity="0.9"/>
+        </g>
+
+        <path id="track-path"
+          d="M 30,380
+             C 80,375 150,355 210,325
+             C 270,295 330,262 385,228
+             C 420,208 450,178 475,148
+             C 495,122 508,72 520,25
+             C 532,72 545,128 568,180
+             C 590,228 612,272 635,305
+             C 652,328 667,350 680,368
+             C 693,360 700,340 703,318
+             C 706,296 703,272 698,250
+             C 693,228 685,208 678,190
+             C 671,172 665,158 665,145
+             C 665,132 671,120 683,112
+             C 695,104 712,102 728,108
+             C 744,114 756,126 762,142
+             C 768,158 768,178 762,196
+             C 756,214 744,228 728,236
+             C 712,244 695,244 683,238
+             C 671,232 665,220 665,208
+             C 665,200 668,193 672,188
+             C 690,200 710,205 728,202
+             C 760,196 782,170 782,142
+             C 782,136 781,130 780,125
+             C 800,130 820,145 835,162
+             C 855,184 868,212 874,238
+             C 876,248 877,258 876,266
+             C 874,280 868,292 860,300
+             C 880,305 900,318 916,335
+             C 936,356 948,382 950,400
+             C 960,395 975,385 990,375
+             C 1010,362 1030,348 1055,340
+             C 1080,332 1110,332 1140,338
+             C 1160,342 1175,350 1185,360"
+          fill="none" stroke="url(#trackGrad)" stroke-width="8"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+        <g id="heat-map-layer" clip-path="url(#trackClip)"></g>
+        <g id="zone-labels" font-family="'Courier New', monospace" font-size="11" fill="white" text-anchor="middle"></g>
+
+        <g id="coaster-car" transform="translate(-100,-100)" style="display:none;">
+          <rect x="-18" y="-14" width="36" height="22" rx="5" fill="#CC0000" stroke="#FF4444" stroke-width="1.5"/>
+          <rect x="-10" y="-12" width="20" height="10" rx="2" fill="#87CEEB" opacity="0.7"/>
+          <circle cx="-10" cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
+          <circle cx="10"  cy="10" r="5" fill="#222" stroke="#666" stroke-width="1"/>
+          <circle cx="0" cy="-16" r="5" fill="#FFD700"/>
+          <rect x="-4" y="-11" width="8" height="7" rx="2" fill="#FFD700"/>
+        </g>
+
+        <rect id="click-overlay" x="0" y="0" width="1200" height="500" fill="transparent" style="cursor:crosshair"/>
+        <circle id="placement-ring" cx="-100" cy="-100" r="14" fill="none" stroke="#FFD700" stroke-width="2.5" opacity="0.8" stroke-dasharray="4 3"/>
+      </svg>
+
+      <div id="stage-label-display" class="stage-label-display">
+        <span id="stage-label-text">Click anywhere on the track</span>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="controls">
+      <button id="submit-btn" class="btn-submit" disabled>Place your car first</button>
+      <button id="vote-again-btn" class="btn-sandbox btn-again" style="display:none; margin-left:1rem;" onclick="resetVote()">Vote Again</button>
+      <p id="submit-status" class="submit-status"></p>
+    </div>
+
+    <!-- LIVE VOTE COUNT -->
+    <div class="sandbox-vote-count">
+      Total votes in sandbox: <strong id="sandbox-count">0</strong>
+    </div>
+
+    <!-- HEAT MAP -->
+    <section class="heatmap-section">
+      <h2>Heat Map Preview</h2>
+      <p class="heatmap-subtitle">Updates live after every submission.</p>
+      <div class="coaster-wrapper heatmap-view">
+        <svg id="heatmap-svg" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="trackGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#FFD700" />
+              <stop offset="40%"  stop-color="#FFA500" />
+              <stop offset="50%"  stop-color="#CC5500" />
+              <stop offset="65%"  stop-color="#8B1A1A" />
+              <stop offset="80%"  stop-color="#4A0A0A" />
+              <stop offset="100%" stop-color="#1A0A00" />
+            </linearGradient>
+            <linearGradient id="skyGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#87CEEB" />
+              <stop offset="42%"  stop-color="#4A7C9E" />
+              <stop offset="55%"  stop-color="#2C3E50" />
+              <stop offset="75%"  stop-color="#1A1A2E" />
+              <stop offset="100%" stop-color="#0D0D0D" />
+            </linearGradient>
+            <linearGradient id="groundGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#5D8A3C" />
+              <stop offset="45%"  stop-color="#7A6A3C" />
+              <stop offset="70%"  stop-color="#4A3B2A" />
+              <stop offset="100%" stop-color="#1A1208" />
+            </linearGradient>
+            <filter id="glow2">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <clipPath id="trackClip2"><rect x="0" y="0" width="1200" height="500"/></clipPath>
+          </defs>
+
+          <rect x="0" y="0" width="1200" height="420" fill="url(#skyGrad2)" />
+          <rect x="0" y="420" width="1200" height="80" fill="url(#groundGrad2)" />
+          <circle cx="80" cy="60" r="40" fill="#FFD700" opacity="0.85"/>
+          <g stroke="#FFD700" stroke-width="2" opacity="0.6">
+            <line x1="80" y1="10" x2="80" y2="0"/>
+            <line x1="120" y1="20" x2="130" y2="12"/>
+            <line x1="130" y1="60" x2="142" y2="60"/>
+            <line x1="120" y1="100" x2="130" y2="108"/>
+            <line x1="80" y1="110" x2="80" y2="120"/>
+            <line x1="40" y1="100" x2="30" y2="108"/>
+            <line x1="30" y1="60" x2="18" y2="60"/>
+            <line x1="40" y1="20" x2="30" y2="12"/>
+          </g>
+          <g opacity="0.7">
+            <ellipse cx="950" cy="55" rx="70" ry="35" fill="#2C2C2C"/>
+            <ellipse cx="1000" cy="45" rx="55" ry="30" fill="#3A3A3A"/>
+            <ellipse cx="1070" cy="60" rx="65" ry="32" fill="#222"/>
+            <ellipse cx="1130" cy="50" rx="50" ry="28" fill="#1A1A1A"/>
+            <polygon points="1010,80 1002,110 1010,108 1000,140 1018,100 1010,102" fill="#FFD700" opacity="0.9"/>
+          </g>
+
+          <path id="heatmap-track-path"
+            d="M 30,380
+               C 80,375 150,355 210,325
+               C 270,295 330,262 385,228
+               C 420,208 450,178 475,148
+               C 495,122 508,72 520,25
+               C 532,72 545,128 568,180
+               C 590,228 612,272 635,305
+               C 652,328 667,350 680,368
+               C 693,360 700,340 703,318
+               C 706,296 703,272 698,250
+               C 693,228 685,208 678,190
+               C 671,172 665,158 665,145
+               C 665,132 671,120 683,112
+               C 695,104 712,102 728,108
+               C 744,114 756,126 762,142
+               C 768,158 768,178 762,196
+               C 756,214 744,228 728,236
+               C 712,244 695,244 683,238
+               C 671,232 665,220 665,208
+               C 665,200 668,193 672,188
+               C 690,200 710,205 728,202
+               C 760,196 782,170 782,142
+               C 782,136 781,130 780,125
+               C 800,130 820,145 835,162
+               C 855,184 868,212 874,238
+               C 876,248 877,258 876,266
+               C 874,280 868,292 860,300
+               C 880,305 900,318 916,335
+               C 936,356 948,382 950,400
+               C 960,395 975,385 990,375
+               C 1010,362 1030,348 1055,340
+               C 1080,332 1110,332 1140,338
+               C 1160,342 1175,350 1185,360"
+            fill="none" stroke="url(#trackGrad2)" stroke-width="8"
+            stroke-linecap="round" stroke-linejoin="round"/>
+
+          <g id="heatmap-dots" clip-path="url(#trackClip2)"></g>
+          <g id="heatmap-zone-labels" font-family="'Courier New', monospace" font-size="11" fill="white" text-anchor="middle"></g>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Sandbox mode — <a href="/" style="color:#C9A456">Back to live site</a></p>
+  </footer>
+
+  <script src="js/track.js"></script>
+  <script>
+  (function () {
+    const MAX_SNAP = 80;
+    const svg        = document.getElementById('coaster-svg');
+    const overlay    = document.getElementById('click-overlay');
+    const ring       = document.getElementById('placement-ring');
+    const labelEl    = document.getElementById('stage-label-text');
+    const submitBtn  = document.getElementById('submit-btn');
+    const againBtn   = document.getElementById('vote-again-btn');
+    const statusEl   = document.getElementById('submit-status');
+    const countEl    = document.getElementById('sandbox-count');
+    const heatmapSvg = document.getElementById('heatmap-svg');
+    const dotsLayer  = document.getElementById('heatmap-dots');
+
+    let selectedT = null;
+    let votes = [];   // in-memory store
+
+    // Draw zone markers on both SVGs
+    document.addEventListener('DOMContentLoaded', () => {
+      drawZoneMarkers(svg);
+      // Draw markers on heatmap SVG too (use heatmap-zone-labels)
+      const hmPath  = document.getElementById('heatmap-track-path');
+      const hmLayer = document.getElementById('heatmap-zone-labels');
+      if (hmPath && hmLayer) {
+        window.TRACK_ZONES.forEach((zone, i) => {
+          const pt = getPointAtT(hmPath, zone.t);
+          const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('x1', pt.x); line.setAttribute('y1', pt.y - 14);
+          line.setAttribute('x2', pt.x); line.setAttribute('y2', pt.y - 4);
+          line.setAttribute('stroke','rgba(201,164,86,0.5)'); line.setAttribute('stroke-width','1.5');
+          hmLayer.appendChild(line);
+          const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+          c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y - 20); c.setAttribute('r','7');
+          c.setAttribute('fill', i===4 ? '#CC0000' : 'rgba(0,0,0,0.7)');
+          c.setAttribute('stroke','rgba(201,164,86,0.6)'); c.setAttribute('stroke-width','1');
+          hmLayer.appendChild(c);
+          const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+          t.setAttribute('x', pt.x); t.setAttribute('y', pt.y - 16);
+          t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle');
+          t.setAttribute('font-size','8'); t.setAttribute('fill','#FFD700'); t.setAttribute('font-weight','bold');
+          t.textContent = i + 1;
+          hmLayer.appendChild(t);
+        });
+      }
+    });
+
+    function svgPt(evt) {
+      const pt = svg.createSVGPoint();
+      pt.x = evt.clientX; pt.y = evt.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    overlay.addEventListener('mousemove', evt => {
+      const path = svg.getElementById('track-path');
+      const p = svgPt(evt);
+      const { t, dist } = findNearestT(path, p.x, p.y);
+      if (dist > MAX_SNAP) { ring.setAttribute('cx', -200); return; }
+      const pt = getPointAtT(path, t);
+      ring.setAttribute('cx', pt.x); ring.setAttribute('cy', pt.y);
+      labelEl.textContent = getLabelForT(t);
+    });
+
+    overlay.addEventListener('mouseleave', () => {
+      ring.setAttribute('cx', -200);
+      if (!selectedT) labelEl.textContent = 'Click anywhere on the track';
+    });
+
+    overlay.addEventListener('click', evt => {
+      const path = svg.getElementById('track-path');
+      const p = svgPt(evt);
+      const { t, dist } = findNearestT(path, p.x, p.y);
+      if (dist > MAX_SNAP) return;
+      selectedT = t;
+      placeCarAtT(svg, t);
+      labelEl.textContent = getLabelForT(t);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit My Vote';
+    });
+
+    submitBtn.addEventListener('click', () => {
+      if (selectedT === null) return;
+      votes.push({ t: selectedT });
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Vote Added!';
+      statusEl.textContent = `Vote #${votes.length} recorded at zone: ${getLabelForT(selectedT)}`;
+      againBtn.style.display = 'inline-block';
+      renderHeatMap();
+      countEl.textContent = votes.length;
+    });
+
+    window.resetVote = function () {
+      selectedT = null;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Place your car first';
+      statusEl.textContent = '';
+      againBtn.style.display = 'none';
+      const car = svg.getElementById('coaster-car');
+      if (car) car.style.display = 'none';
+      labelEl.textContent = 'Click anywhere on the track';
+    };
+
+    window.addRandomVotes = function (n) {
+      for (let i = 0; i < n; i++) {
+        // Weighted random — more votes near zones 4-6 (the topical area)
+        const rand = Math.random();
+        let t;
+        if (rand < 0.15) t = Math.random() * 0.15;
+        else if (rand < 0.35) t = 0.15 + Math.random() * 0.15;
+        else if (rand < 0.65) t = 0.30 + Math.random() * 0.25;
+        else if (rand < 0.85) t = 0.55 + Math.random() * 0.25;
+        else t = 0.80 + Math.random() * 0.20;
+        votes.push({ t });
+      }
+      renderHeatMap();
+      countEl.textContent = votes.length;
+      statusEl.textContent = `Added ${n} random votes. Total: ${votes.length}`;
+    };
+
+    window.clearVotes = function () {
+      votes = [];
+      dotsLayer.innerHTML = '';
+      countEl.textContent = 0;
+      statusEl.textContent = 'Votes cleared.';
+    };
+
+    function renderHeatMap() {
+      dotsLayer.innerHTML = '';
+      const path = document.getElementById('heatmap-track-path');
+      if (!path || votes.length === 0) return;
+
+      const BINS = 100;
+      const bins = new Array(BINS).fill(0);
+      votes.forEach(v => {
+        const bin = Math.min(BINS - 1, Math.floor(v.t * BINS));
+        bins[bin]++;
+      });
+      const maxBin = Math.max(...bins, 1);
+
+      bins.forEach((count, i) => {
+        if (count === 0) return;
+        const t         = (i + 0.5) / BINS;
+        const pt        = getPointAtT(path, t);
+        const intensity = count / maxBin;
+        const radius    = 2 + intensity * 7;
+        const opacity   = 0.3 + intensity * 0.65;
+        const r = Math.round(255 * Math.min(1, intensity * 2));
+        const g = Math.round(255 * Math.max(0, 1 - Math.abs(intensity - 0.5) * 2));
+        const b = Math.round(255 * Math.max(0, 1 - intensity * 2));
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pt.x);
+        circle.setAttribute('cy', pt.y);
+        circle.setAttribute('r', radius);
+        circle.setAttribute('fill', `rgb(${r},${g},${b})`);
+        circle.setAttribute('opacity', opacity);
+        circle.setAttribute('filter', 'url(#glow2)');
+        dotsLayer.appendChild(circle);
+      });
+    }
+  })();
+  </script>
+</body>
+</html>
